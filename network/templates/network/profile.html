@@ -1,0 +1,63 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+<div class="row py-5 px-4">
+    <div class="col-md-5 mx-auto">
+        <!-- Profile widget -->
+        <div class="bg-white shadow rounded overflow-hidden">
+            <div class="px-4 pt-0 pb-4 cover">
+                <div class="media align-items-end profile-head">
+                    <div class="profile mr-3">
+                        <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80" alt="..." width="130" class="rounded mb-2 img-thumbnail">
+                        {% if user.is_authentucated and user != user %}
+                            <form action="{% url 'profile' user.username %}" method="POST">
+                            {% csrf_token %}
+                            {% if following_profile %}
+                                <input type="submit" class="btn btn-outline-dark btn-sm btn-block" value="Following" id="unfollow" name="unfollow">
+                            {% else %}
+                                <input type="submit" class="btn btn-outline-primary btn-sm btn-block" value="Follow" name="follow">
+                            {% endif %}
+                            </form>
+                        {% endif %}
+                    </div>
+                    <div class="media-body mb-5 text-white">
+                        <h4 class="mt-0 mb-0" style="color:black">{{user.username}}</h4>
+                        <h4 class="mt-0 mb-0" style="color:black">@{{user.username}}</h4>
+                        <p class="small mb-4" style="color:black"> <i class="fas fa-map-marker-alt mr-2"></i>Phnom Penh</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-light p-4 d-flex justify-content-end text-center">
+                <ul class="list-inline mb-0">
+                    <li class="list-inline-item">
+                        <h5 class="font-weight-bold mb-0 d-block">{{ user.posts.count }}</h5><small class="text-muted"> <i class="fas fa-image mr-1"></i>Posts</small>
+                    </li>
+                    <li class="list-inline-item">
+                        <h5 class="font-weight-bold mb-0 d-block">{{ user.followers.count }}</h5><small class="text-muted"> <i class="fas fa-user mr-1"></i>Followers</small>
+                    </li>
+                    <li class="list-inline-item">
+                        <h5 class="font-weight-bold mb-0 d-block">{{ user.following.count }}</h5><small class="text-muted"> <i class="fas fa-user mr-1"></i>Following</small>
+                    </li>
+                </ul>
+            </div>
+            <div class="px-4 py-3">
+                <h5 class="mb-0">About</h5>
+                <div class="p-4 rounded shadow-sm bg-light">
+                    <p class="font-italic mb-0">Web Developer</p>
+                    <p class="font-italic mb-0">Lives in Phnom Penh</p>
+                    <p class="font-italic mb-0">Software Engineer</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+    {% include "network/post.html" with posts=page_obj %}
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/profile.js' %}"></script>
+{% endblock %}
